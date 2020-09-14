@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Repositories\RoleRepository;
+use App\Repositories\UploadRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -28,16 +31,23 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
+
+    private $userRepository;
+    private $uploadRepository;
+    private $roleRepository;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepository $userRepository, UploadRepository $uploadRepository, RoleRepository $roleRepository)
     {
         $this->middleware('guest');
+        $this->userRepository = $userRepository;
+        $this->uploadRepository = $uploadRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     /**
@@ -49,9 +59,9 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
         ]);
     }
 
@@ -59,14 +69,27 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\User
+     * @return \App\Models\User
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $user = new User;
+        $user->name =  $data['name'];
+        $user->email =  $data['email'];
+        $user->password = Hash::make($data['password']);
+        $user->api_token = str_random(60);
+        $user->save();
+
+        $defaultRoles = $this->roleRepository->findByField('default', '1');
+        $defaultRoles = $defaultRoles->pluck('name')->toArray();
+        $user->assignRole($defaultRoles);
+
+        if(copy(public_path('images/avatar_default.png'),public_path('images/avatar_default_temp.png'))){
+            $user->addMedia(public_path('images/avatar_default_temp.png'))
+                ->withCustomProperties(['uuid' => bcrypt(str_random())])
+                ->toMediaCollection('avatar');
+        }
+
+        return $user;
     }
 }

@@ -1,8 +1,25 @@
+
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
 
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.primary {
+  background: $primary;
+}
+.accent {
+  background: $accent;
+}
+.large-header {
+  font-size: 4em;
+}
+.large-text {
+  font-size: 1.4em;
+}
+.nav-link {
+  font-size: 1.15em;
+}

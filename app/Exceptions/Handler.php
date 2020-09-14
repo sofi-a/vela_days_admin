@@ -3,7 +3,10 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -42,10 +45,27 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof NotFoundHttpException) {
+            if ($request->ajax()) {
+                return response()->json(['error' => trans('error.page.not_found')], 404);
+            }
+            return response()->view('vendor.errors.page', ['code' => 404, 'message' => trans('error.page.not_found')]);
+        }
+        if ($exception instanceof UnauthorizedException) {
+            if ($request->ajax()) {
+                return response()->json(['error' => $exception->getMessage()], 403);
+            }
+            return response()->view('vendor.errors.page', ['code' => 403, 'message' => $exception->getMessage()]);
+        }
+        if ($exception instanceof AuthenticationException) {
+            if ($request->ajax()) {
+                return response()->json(['error' => $exception->getMessage()], 401);
+            }
+        }
         return parent::render($request, $exception);
     }
 }

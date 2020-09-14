@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'agree' => 'በውሎቹ እስማማለሁ',
+    'already_member' => 'አባልነት ነኝ',
+    'email' => 'የ ኢሜል አድራሻ',
+    'failed' => 'እነዚህ መረጃዎች ከማስረጃዎቻችን ጋር አይዛመዱም',
+    'forgot_password' => 'የይለፍ ቃሉን እረሳሁ',
+    'login' => 'ግባ',
+    'login_facebook' => 'ፌስቡክ በመጠቀም ይግቡ',
+    'login_google' => 'Google+ ን በመጠቀም ይግቡ',
+    'login_title' => 'ክፍለ ጊዜዎን ለመጀመር በመለያ ይግቡ',
+    'login_twitter' => 'በትዊተር በመጠቀም ይግቡ',
+    'logout' => 'ውጣ',
+    'name' => 'ሙሉ ስም',
+    'password' => 'የይለፍ ቃል',
+    'password_confirmation' => 'የይለፍ ቃልዎን ያረጋግጡ',
+    'register' => 'ግባ',
+    'register_new_member' => 'አዲስ አባልነት ይመዝገቡ',
+    'remember_me' => 'አስታወስከኝ',
+    'remember_password' => 'ለመግባት የመግቢያ የይለፍ ቃሌን አስታውሳለሁ',
+    'reset_password' => 'ዳግም አስጀምር',
+    'reset_password_title' => 'አዲሱን የይለፍ ቃልዎን ያስገቡ',
+    'reset_title' => 'የይለፍ ቃል ዳግም ለማስጀመር ኢሜይል ያድርጉ',
+    'send_password' => 'የይለፍ ቃል ዳግም ማስጀመሪያ አገናኝ ይላኩ',
+    'throttle' => 'በጣም ብዙ የመግቢያ ሙከራዎች:: እባክዎን እንደገና ይግቡ:ሰከንዶች ሰከንዶች.',
+];
